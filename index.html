@@ -138,6 +138,10 @@
             max-width: 28rem;
             margin: 1.5rem 0;
             overflow: hidden;
+            transform: perspective(1100px) rotateX(var(--card-rotate-x, 0deg)) rotateY(var(--card-rotate-y, 0deg));
+            transform-style: preserve-3d;
+            will-change: transform;
+            transition: transform 180ms ease-out, box-shadow 180ms ease-out;
             border-radius: var(--r-xl);
             background: var(--glass);
             border: 1px solid rgba(255, 255, 255, .12);
@@ -659,6 +663,50 @@
         const $ = (id) => document.getElementById(id);
         const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         const card = document.querySelector(".card");
+
+        /* ===== HIỆU ỨNG NGHIÊNG CARD 3D ===== */
+        (() => {
+            if (!card || reduceMotion.matches) return;
+
+            const maxTilt = 10;
+            let bounds = null;
+            let frame = null;
+
+            function updateTilt(clientX, clientY) {
+                bounds = card.getBoundingClientRect();
+                const x = (clientX - bounds.left) / bounds.width;
+                const y = (clientY - bounds.top) / bounds.height;
+                const rotateY = (x - 0.5) * maxTilt * 2;
+                const rotateX = (0.5 - y) * maxTilt * 2;
+
+                if (frame !== null) cancelAnimationFrame(frame);
+                frame = requestAnimationFrame(() => {
+                    card.style.setProperty("--card-rotate-x", `${rotateX.toFixed(2)}deg`);
+                    card.style.setProperty("--card-rotate-y", `${rotateY.toFixed(2)}deg`);
+                    card.style.boxShadow = `${-rotateY * 1.2}px ${18 + Math.abs(rotateX) * 1.5}px 70px rgba(0,0,0,.48), 0 0 42px rgba(236,72,153,.10)`;
+                    frame = null;
+                });
+            }
+
+            function resetTilt() {
+                if (frame !== null) cancelAnimationFrame(frame);
+                frame = null;
+                card.style.setProperty("--card-rotate-x", "0deg");
+                card.style.setProperty("--card-rotate-y", "0deg");
+                card.style.removeProperty("box-shadow");
+            }
+
+            card.addEventListener("pointermove", (event) => {
+                if (event.pointerType === "touch") return;
+                updateTilt(event.clientX, event.clientY);
+            }, { passive: true });
+            card.addEventListener("pointerleave", resetTilt, { passive: true });
+            card.addEventListener("pointercancel", resetTilt, { passive: true });
+
+            reduceMotion.addEventListener?.("change", () => {
+                if (reduceMotion.matches) resetTilt();
+            });
+        })();
 
         /* ===== 0. VIDEO BANNER ===== */
         const bannerVideo = $("banner-video");
