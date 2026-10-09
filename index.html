@@ -93,6 +93,22 @@
             z-index: 0;
             background: radial-gradient(circle at 50% 30%, #312e81, #111827 50%, var(--bg));
         }
+        /* Hình nền: làm mờ + tối bớt (chỉnh blur / brightness theo ý) */
+        .page-bg::before {
+            content: "";
+            position: absolute;
+            inset: -40px; /* tràn ra ngoài để không bị viền khi blur */
+            background: url("https://i.ytimg.com/vi/xhDr1QmHpEk/maxresdefault.jpg") center / cover no-repeat;
+            filter: blur(8px) brightness(.5);
+        }
+ 
+        /* Lớp phủ tối nhẹ để chữ nổi bật hơn */
+        .page-bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(2, 6, 23, .25);
+        }
 
         /* ---------- Tuyết ---------- */
         #snow-canvas {
