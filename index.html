@@ -224,7 +224,18 @@
 
         .icon--verified { width: 14px; height: 14px; color: var(--pink-500); }
 
-        .name__tagline { margin: .25rem 0 0; font-size: .75rem; line-height: 1rem; font-weight: 500; color: var(--pink-400); }
+        .name__tagline { margin: .25rem 0 0; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace; font-size: .75rem; line-height: 1.25rem; font-weight: 500; cursor: default; color: var(--pink-400); }
+        .name__tagline .w  { display: inline-block; white-space: nowrap; }
+        .name__tagline .c  { display: inline-block; min-width: 1ch; text-align: center; }
+        .name__tagline .mx {
+            color: #4ade80;
+            text-shadow: 0 0 6px rgba(74, 222, 128, .9), 0 0 14px rgba(34, 197, 94, .6);
+        }
+        .name__tagline .fl {
+            color: #fff;
+            text-shadow: 0 0 8px rgba(244, 114, 182, .9);
+        }
+
 
         .bio {
             margin: 0 0 1rem;
@@ -339,8 +350,8 @@
 
         .social__link--facebook  { border-color: rgba(59, 130, 246, .3);  background: rgba(37, 99, 235, .2); }
         .social__link--facebook:hover  { background: rgba(37, 99, 235, .4); }
-        .social__link--tiktok    { border-color: rgba(71, 85, 105, .3);   background: rgba(30, 41, 59, .6); }
-        .social__link--tiktok:hover    { background: rgba(51, 65, 85, .6); }
+        .social__link--tiktok    { border-color: rgba(244, 114, 182, .3); background: rgba(219, 39, 119, .2); }
+        .social__link--tiktok:hover    { background: rgba(219, 39, 119, .4); }
         .social__link--instagram { border-color: rgba(168, 85, 247, .3);  background: rgba(147, 51, 234, .2); }
         .social__link--instagram:hover { background: rgba(147, 51, 234, .4); }
         .social__link--discord   { border-color: rgba(99, 102, 241, .3);  background: rgba(79, 70, 229, .2); }
@@ -499,6 +510,158 @@
             color: var(--slate-400);
         }
 
+
+        /* ---------- Animation cho điện thoại / cảm ứng ---------- */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(255,255,255,.55), rgba(244,114,182,.25) 60%, transparent 70%);
+            transform: translate(-50%, -50%) scale(0);
+            animation: ripple-out .6s ease-out forwards;
+        }
+        @keyframes ripple-out {
+            to { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+
+        @keyframes m-rise {
+            from { opacity: 0; transform: translateY(26px) scale(.96); filter: blur(6px); }
+            to   { opacity: 1; transform: none; filter: blur(0); }
+        }
+        @keyframes m-card-in {
+            from { opacity: 0; transform: perspective(1100px) translateY(40px) rotateX(8deg) scale(.94); }
+            to   { opacity: 1; transform: perspective(1100px) none; }
+        }
+        @keyframes m-float {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-5px); }
+        }
+        @keyframes m-shine {
+            0%, 70% { transform: translateX(-120%); }
+            100%    { transform: translateX(120%); }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .card { animation: m-card-in .8s cubic-bezier(.2,.8,.2,1) backwards; }
+
+            .banner, .avatar-wrap, .name, .bio, .roles,
+            .social__title, .social__grid, .games, .music, .card__footer {
+                animation: m-rise .7s cubic-bezier(.2,.8,.2,1) backwards;
+            }
+            .banner        { animation-delay: .15s; }
+            .avatar-wrap   { animation-delay: .30s; }
+            .name          { animation-delay: .40s; }
+            .bio           { animation-delay: .50s; }
+            .roles         { animation-delay: .60s; }
+            .social__title { animation-delay: .70s; }
+            .social__grid  { animation-delay: .78s; }
+            .games         { animation-delay: .88s; }
+            .music         { animation-delay: .98s; }
+            .card__footer  { animation-delay: 1.05s; }
+
+            /* Avatar nhấp nhô nhẹ */
+            .avatar { animation: m-float 4s ease-in-out 1.2s infinite; }
+
+            /* Ánh sáng quét qua vai trò, tự chạy vì không có hover */
+            .role::after { animation: m-shine 3.6s ease-in-out infinite; }
+            .role--blue::after   { animation-delay: .5s; }
+            .role--purple::after { animation-delay: 1s; }
+
+            /* Phản hồi khi chạm */
+            .role, .social__link, .game, .music__btn {
+                position: relative;
+                overflow: hidden;
+                transition: transform .18s ease, background-color .2s;
+            }
+            .role:active, .social__link:active, .game:active { transform: scale(.94); }
+            .avatar__img:active { transform: scale(.92) rotate(-3deg); }
+            .game { overflow: visible; }
+        }
+
+
+        /* ---------- Hiệu ứng vào trang cho máy tính ---------- */
+        @keyframes d-bg-in {
+            from { opacity: 0; transform: scale(1.12); }
+            to   { opacity: 1; transform: none; }
+        }
+        @keyframes d-card-in {
+            0%   { opacity: 0; transform: perspective(1100px) translateY(70px) rotateX(-18deg) rotateY(10deg) scale(.88); filter: blur(10px); }
+            60%  { opacity: 1; filter: blur(0); }
+            100% { opacity: 1; transform: perspective(1100px) none; }
+        }
+        @keyframes d-slide-left {
+            from { opacity: 0; transform: translateX(-34px); }
+            to   { opacity: 1; transform: none; }
+        }
+        @keyframes d-slide-right {
+            from { opacity: 0; transform: translateX(34px); }
+            to   { opacity: 1; transform: none; }
+        }
+        @keyframes d-pop {
+            0%   { opacity: 0; transform: scale(.4) translateY(14px); }
+            70%  { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: none; }
+        }
+        @keyframes d-avatar-in {
+            0%   { opacity: 0; transform: scale(.2) rotate(-120deg); }
+            70%  { opacity: 1; transform: scale(1.12) rotate(8deg); }
+            100% { opacity: 1; transform: none; }
+        }
+        @keyframes d-banner-in {
+            from { clip-path: inset(0 0 100% 0); opacity: 0; }
+            to   { clip-path: inset(0 0 0 0); opacity: 1; }
+        }
+        @keyframes d-name-in {
+            from { opacity: 0; letter-spacing: .35em; filter: blur(8px); }
+            to   { opacity: 1; letter-spacing: -.025em; filter: blur(0); }
+        }
+        @keyframes d-glow-sweep {
+            from { transform: translateX(-130%); }
+            to   { transform: translateX(130%); }
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .page-bg { animation: d-bg-in 1.4s ease-out backwards; }
+            .card    { animation: d-card-in 1s cubic-bezier(.2,.9,.25,1) .15s backwards; }
+
+            /* Vệt sáng quét qua thẻ một lần khi vào */
+            .card::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                z-index: 20;
+                pointer-events: none;
+                background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.16) 50%, transparent 65%);
+                transform: translateX(-130%);
+                animation: d-glow-sweep 1.2s ease-out 1.1s forwards;
+            }
+
+            .banner       { animation: d-banner-in .9s cubic-bezier(.3,.8,.3,1) .45s backwards; }
+            .avatar-wrap  { animation: d-avatar-in .9s cubic-bezier(.3,1.2,.4,1) .75s backwards; }
+            .name__row    { animation: d-name-in .9s ease-out .95s backwards; }
+            .name__tagline{ animation: d-slide-left .7s ease-out 1.1s backwards; }
+            .bio          { animation: d-slide-right .7s ease-out 1.2s backwards; }
+
+            .role         { animation: d-pop .6s cubic-bezier(.3,1.3,.5,1) backwards; }
+            .role:nth-child(1) { animation-delay: 1.3s; }
+            .role:nth-child(2) { animation-delay: 1.4s; }
+            .role:nth-child(3) { animation-delay: 1.5s; }
+
+            .social__title { animation: d-slide-left .6s ease-out 1.55s backwards; }
+            .social__link  { animation: d-slide-left .55s ease-out backwards; }
+            .social__link:nth-child(1) { animation-delay: 1.6s; }
+            .social__link:nth-child(2) { animation-delay: 1.68s; }
+            .social__link:nth-child(3) { animation-delay: 1.76s; }
+            .social__link:nth-child(4) { animation-delay: 1.84s; }
+
+            .game          { animation: d-slide-right .6s ease-out backwards; }
+            .game:nth-child(1) { animation-delay: 1.9s; }
+            .game:nth-child(2) { animation-delay: 2s; }
+
+            .music         { animation: d-slide-left .7s ease-out 2.1s backwards; }
+            .card__footer  { animation: d-slide-right .7s ease-out 2.25s backwards; }
+        }
+
         @media (max-width: 380px) {
             :root { --pad-x: 1rem; }
             .social__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -571,7 +734,7 @@
                         <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>
                     </svg>
                 </h1>
-                <p class="name__tagline">「 Set Your Heart Ablaze! &amp; Hack The Matrix 」</p>
+                <p class="name__tagline">「 I can hack any system, except your heart 」</p>
             </div>
 
             <p class="bio">✨ NÔ LỆ CỦA MI CHÓ🌌</p>
@@ -700,6 +863,16 @@
                 if (event.pointerType === "touch") return;
                 updateTilt(event.clientX, event.clientY);
             }, { passive: true });
+            card.addEventListener("touchstart", (e) => {
+                const t = e.touches[0];
+                if (t) updateTilt(t.clientX, t.clientY);
+            }, { passive: true });
+            card.addEventListener("touchmove", (e) => {
+                const t = e.touches[0];
+                if (t) updateTilt(t.clientX, t.clientY);
+            }, { passive: true });
+            card.addEventListener("touchend", resetTilt, { passive: true });
+            card.addEventListener("touchcancel", resetTilt, { passive: true });
             card.addEventListener("pointerleave", resetTilt, { passive: true });
             card.addEventListener("pointercancel", resetTilt, { passive: true });
 
@@ -1116,6 +1289,120 @@
             window.addEventListener("resize", resize, { passive: true });
 
             resize();
+        })();
+        /* ===== 5. RIPPLE KHI CHẠM (CẢM ỨNG) ===== */
+        (() => {
+            if (reduceMotion.matches) return;
+            document.addEventListener("pointerdown", (e) => {
+                if (e.pointerType !== "touch") return;
+                const target = e.target.closest(".role, .social__link, .game, .music__btn");
+                if (!target) return;
+                const rect = target.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height) * 2.2;
+                const dot = document.createElement("span");
+                dot.className = "ripple";
+                dot.style.width = dot.style.height = size + "px";
+                dot.style.left = (e.clientX - rect.left) + "px";
+                dot.style.top = (e.clientY - rect.top) + "px";
+                target.appendChild(dot);
+                dot.addEventListener("animationend", () => dot.remove(), { once: true });
+                if (navigator.vibrate) { try { navigator.vibrate(8); } catch (_) {} }
+            }, { passive: true });
+        })();
+        /* ===== 6. CHỮ MA TRẬN CHO DÒNG TAGLINE ===== */
+        (() => {
+            const el = document.querySelector(".name__tagline");
+            if (!el) return;
+            const text = el.textContent.trim();
+            el.setAttribute("aria-label", text);
+            if (reduceMotion.matches) return;
+
+            const POOL = "01ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎ<>/\\|=+*#$%&";
+            const rand = () => POOL[(Math.random() * POOL.length) | 0];
+
+            // Mỗi từ là một khối không ngắt dòng, mỗi ký tự là một ô cố định
+            el.textContent = "";
+            const cells = [];
+            text.split(" ").forEach((word, wi, arr) => {
+                const w = document.createElement("span");
+                w.className = "w";
+                w.setAttribute("aria-hidden", "true");
+                for (const ch of word) {
+                    const c = document.createElement("span");
+                    c.className = "c";
+                    c.textContent = ch;
+                    w.appendChild(c);
+                    cells.push({ node: c, ch });
+                }
+                el.appendChild(w);
+                if (wi < arr.length - 1) el.appendChild(document.createTextNode(" "));
+            });
+
+            let timer = null, raf = null;
+
+            function scrambleAll() {
+                for (const c of cells) {
+                    c.node.textContent = rand();
+                    c.node.className = "c mx";
+                }
+            }
+
+            function decode(duration = 1700) {
+                if (raf !== null) cancelAnimationFrame(raf);
+                const start = performance.now();
+                const n = cells.length;
+                const resolveAt = cells.map((_, i) => (i / n) * duration + Math.random() * 350);
+                const flashed = new Array(n).fill(false);
+                let last = 0;
+
+                function step(now) {
+                    const t = now - start;
+                    if (now - last >= 40) {
+                        last = now;
+                        let pending = 0;
+                        cells.forEach((c, i) => {
+                            if (t >= resolveAt[i]) {
+                                if (!flashed[i]) {
+                                    flashed[i] = true;
+                                    c.node.textContent = c.ch;
+                                    c.node.className = "c fl";
+                                    setTimeout(() => { c.node.className = "c"; }, 260);
+                                }
+                            } else {
+                                pending++;
+                                c.node.textContent = rand();
+                                c.node.className = "c mx";
+                            }
+                        });
+                        if (pending === 0) { raf = null; return; }
+                    }
+                    raf = requestAnimationFrame(step);
+                }
+                raf = requestAnimationFrame(step);
+            }
+
+            function cycle() {
+                scrambleAll();
+                decode();
+                timer = setTimeout(cycle, 9000);
+            }
+
+            // Hiện ngay ở dạng ký tự lộn xộn, giải mã sau khi hiệu ứng vào trang xong
+            scrambleAll();
+            const coarse = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+            timer = setTimeout(cycle, coarse ? 900 : 1900);
+
+            // Chạm / click vào dòng chữ để chạy lại
+            el.addEventListener("click", () => {
+                clearTimeout(timer);
+                cycle();
+            });
+            el.style.cursor = "pointer";
+
+            document.addEventListener("visibilitychange", () => {
+                if (document.hidden) { clearTimeout(timer); }
+                else { clearTimeout(timer); timer = setTimeout(cycle, 1500); }
+            });
         })();
     </script>
 
